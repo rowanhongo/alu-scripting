@@ -1,21 +1,21 @@
 #!/usr/bin/python3
-"""Module for top_ten function"""
+"""Module for number_of_subscribers function"""
 import requests
 
 
-def top_ten(subreddit):
-    """Query the Reddit API and print the titles of the top 10 posts."""
-    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    headers = {'User-Agent': 'My User Agent 1.0'}
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        data = response.json().get('data').get('children')
-        for post in data:
-            print(post.get('data').get('title'))
-    else:
-        print(None)
-
-
-subreddit_name = "learnpython"  
-top_ten(subreddit_name)
+def number_of_subscribers(subreddit):
+    """
+    Queries the Reddit API and returns the number of subscribers for a given subreddit.
+    Returns 0 if subreddit is invalid or if request fails.
+    """
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    headers = {'User-Agent': 'alu-scripting:v1.0 (by /u/yourusername)'}
+    
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        if response.status_code == 200:
+            return response.json().get('data', {}).get('subscribers', 0)
+        else:
+            return 0
+    except Exception:
+        return 0
